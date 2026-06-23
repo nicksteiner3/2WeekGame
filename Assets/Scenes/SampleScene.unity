@@ -475,6 +475,8 @@ MonoBehaviour:
   baseSpawnRate: 1
   intensityIncreaseInterval: 30
   spawnRateIncreasePerInterval: 0.5
+  debugLimitSpawns: 0
+  debugMaxEnemies: 3
 --- !u!4 &1009392943
 Transform:
   m_ObjectHideFlags: 0
@@ -827,7 +829,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7505d7655799d8d48a67d54e2a1aa071, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapons: []
+  weapons:
+  - {fileID: 11400000, guid: 20b44fe188ed8314eab4cae2237a1089, type: 2}
+  - {fileID: 11400000, guid: 49a52c995dfdb6b4ebef8b17cb33942e, type: 2}
+  - {fileID: 11400000, guid: a4d3c372f90ffd2439284291d6ead01b, type: 2}
   muzzlePoint: {fileID: 1401609674}
   hitMask:
     serializedVersion: 2
