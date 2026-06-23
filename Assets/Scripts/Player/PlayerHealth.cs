@@ -7,6 +7,9 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     public float CurrentHealth { get; private set; }
     public bool IsDead => CurrentHealth <= 0f;
 
+    public delegate void HealthEvent();
+    public event HealthEvent OnDeath;
+
     private void Awake()
     {
         CurrentHealth = maxHealth;
@@ -23,6 +26,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
         if (IsDead)
         {
+            OnDeath?.Invoke();
             Debug.Log("Player died.");
         }
     }

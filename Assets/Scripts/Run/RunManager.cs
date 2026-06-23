@@ -4,11 +4,15 @@ public class RunManager : MonoBehaviour
 {
     [SerializeField] private PlayerHealth playerHealth;
     [SerializeField] private EnemySpawner enemySpawner;
+    [SerializeField] private ExtractionZone extractionZone;
+    [SerializeField] private float extractionSpawnTime = 3f; // 3 seconds for testing (change to 180 for 3 minutes)
 
     public float RunTime { get; private set; }
     public bool IsRunActive { get; private set; }
+    public bool ExtractionActive { get; private set; }
 
     private float _runStartTime;
+    private bool _extractionSpawned;
 
     private void Start()
     {
@@ -22,7 +26,37 @@ public class RunManager : MonoBehaviour
             enemySpawner = FindObjectOfType<EnemySpawner>();
         }
 
+        if (extractionZone == null)
+        {
+            extractionZone = FindObjectOfType<ExtractionZone>();
+        }
+
+        // Subscribe to extraction events
+        if (extractionZone != null)
+        {
+            ExtractionZone.OnExtractionComplete += HandleExtractionComplete;
+        }
+
+        // Subscribe to player death
+        if (playerHealth != null)
+        {
+            playerHealth.OnDeath += HandlePlayerDeath;
+        }
+
         StartNewRun();
+    }
+
+    private void OnDestroy()
+    {
+        if (extractionZone != null)
+        {
+            ExtractionZone.OnExtractionComplete -= HandleExtractionComplete;
+        }
+
+        if (playerHealth != null)
+        {
+            playerHealth.OnDeath -= HandlePlayerDeath;
+        }
     }
 
     private void Update()
@@ -34,6 +68,15 @@ public class RunManager : MonoBehaviour
 
         RunTime = Time.time - _runStartTime;
 
+        // Spawn extraction zone at 3:00
+        if (!_extractionSpawned && RunTime >= extractionSpawnTime && extractionZone != null)
+        {
+            _extractionSpawned = true;
+            ExtractionActive = true;
+            extractionZone.Activate();
+            Debug.Log("[RunManager] Extraction zone activated!");
+        }
+
         if (playerHealth != null && playerHealth.IsDead)
         {
             EndRun();
@@ -43,8 +86,10 @@ public class RunManager : MonoBehaviour
     public void StartNewRun()
     {
         IsRunActive = true;
+        ExtractionActive = false;
         _runStartTime = Time.time;
         RunTime = 0f;
+        _extractionSpawned = false;
 
         if (playerHealth != null)
         {
@@ -56,12 +101,21 @@ public class RunManager : MonoBehaviour
             enemySpawner.Reset();
         }
 
+        if (extractionZone != null)
+        {
+            extractionZone.Deactivate();
+        }
+
         Debug.Log("[RunManager] New run started.");
     }
 
     public void EndRun()
     {
         IsRunActive = false;
+        if (extractionZone != null)
+        {
+            extractionZone.Deactivate();
+        }
         Debug.Log($"[RunManager] Run ended. Survival time: {RunTime:F2} seconds");
     }
 
@@ -69,4 +123,21 @@ public class RunManager : MonoBehaviour
     {
         StartNewRun();
     }
+
+    private void HandleExtractionComplete()
+    {
+        ExtractionActive = false;
+        Debug.Log("[RunManager] Extraction completed! Run successful.");
+        EndRun();
+    }
+
+    private void HandlePlayerDeath()
+    {
+        if (ExtractionActive && extractionZone != null)
+        {
+            extractionZone.CancelExtraction();
+            Debug.Log("[RunManager] Player died during extraction. Extraction cancelled.");
+        }
+    }
 }
+
