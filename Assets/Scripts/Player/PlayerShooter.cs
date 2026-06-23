@@ -13,12 +13,40 @@ public class PlayerShooter : MonoBehaviour
     private int _activeWeaponIndex;
     private float _nextShotTime;
 
+    private int[] _currentAmmo;
+    private bool[] _isReloading;
+    private float[] _reloadEndTime;
+
     public WeaponData ActiveWeapon => (weapons != null && weapons.Length > 0) ? weapons[_activeWeaponIndex] : null;
+    public int ActiveAmmo => _currentAmmo != null ? _currentAmmo[_activeWeaponIndex] : 0;
+    public bool IsReloading => _isReloading != null && _isReloading[_activeWeaponIndex];
+
+    private void Awake()
+    {
+        if (weapons == null)
+        {
+            return;
+        }
+
+        _currentAmmo = new int[weapons.Length];
+        _isReloading = new bool[weapons.Length];
+        _reloadEndTime = new float[weapons.Length];
+
+        for (int i = 0; i < weapons.Length; i++)
+        {
+            if (weapons[i] != null)
+            {
+                _currentAmmo[i] = weapons[i].magazineSize;
+            }
+        }
+    }
 
     private void Update()
     {
         HandleWeaponSwitch();
+        HandleReloadInput();
         HandleFiringInput();
+        CheckReloadComplete();
     }
 
     private void HandleWeaponSwitch()
@@ -55,9 +83,17 @@ public class PlayerShooter : MonoBehaviour
         Debug.Log($"[PlayerShooter] Switched to: {weapons[_activeWeaponIndex].weaponName}");
     }
 
+    private void HandleReloadInput()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            TryStartReload();
+        }
+    }
+
     private void HandleFiringInput()
     {
-        if (ActiveWeapon == null)
+        if (ActiveWeapon == null || IsReloading)
         {
             return;
         }
@@ -66,16 +102,25 @@ public class PlayerShooter : MonoBehaviour
             ? Input.GetMouseButton(0)
             : Input.GetMouseButtonDown(0);
 
-        if (fireInput && Time.time >= _nextShotTime)
+        if (!fireInput || Time.time < _nextShotTime)
         {
-            Fire();
+            return;
         }
+
+        if (_currentAmmo[_activeWeaponIndex] <= 0)
+        {
+            TryStartReload();
+            return;
+        }
+
+        Fire();
     }
 
     private void Fire()
     {
         WeaponData weapon = ActiveWeapon;
         _nextShotTime = Time.time + (1f / Mathf.Max(0.01f, weapon.shotsPerSecond));
+        _currentAmmo[_activeWeaponIndex]--;
 
         Vector3 origin = muzzlePoint != null
             ? muzzlePoint.position
@@ -105,6 +150,58 @@ public class PlayerShooter : MonoBehaviour
             else if (drawDebugRay)
             {
                 Debug.DrawRay(origin, direction * weapon.maxDistance, Color.yellow, 0.15f);
+            }
+        }
+    }
+
+    private void TryStartReload()
+    {
+        if (ActiveWeapon == null || _isReloading[_activeWeaponIndex])
+        {
+            return;
+        }
+
+        if (_currentAmmo[_activeWeaponIndex] >= ActiveWeapon.magazineSize)
+        {
+            return;
+        }
+
+        _isReloading[_activeWeaponIndex] = true;
+        _reloadEndTime[_activeWeaponIndex] = Time.time + ActiveWeapon.reloadTime;
+        Debug.Log($"[PlayerShooter] Reloading {ActiveWeapon.weaponName}...");
+    }
+
+    private void CheckReloadComplete()
+    {
+        if (_isReloading == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < _isReloading.Length; i++)
+        {
+            if (_isReloading[i] && Time.time >= _reloadEndTime[i])
+            {
+                _isReloading[i] = false;
+                _currentAmmo[i] = weapons[i] != null ? weapons[i].magazineSize : 0;
+                Debug.Log($"[PlayerShooter] {weapons[i].weaponName} reloaded.");
+            }
+        }
+    }
+
+    public void RefillAllAmmo()
+    {
+        if (_currentAmmo == null || weapons == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < weapons.Length; i++)
+        {
+            if (weapons[i] != null)
+            {
+                _currentAmmo[i] = weapons[i].magazineSize;
+                _isReloading[i] = false;
             }
         }
     }

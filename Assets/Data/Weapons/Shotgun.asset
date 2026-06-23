@@ -20,3 +20,5 @@ MonoBehaviour:
   maxDistance: 18
   spreadAngleDegrees: 18
   isAutomatic: 0
+  magazineSize: 6
+  reloadTime: 1.5

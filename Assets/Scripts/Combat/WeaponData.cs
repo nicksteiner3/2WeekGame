@@ -14,4 +14,8 @@ public class WeaponData : ScriptableObject
     public float maxDistance = 40f;
     public float spreadAngleDegrees = 0f;
     public bool isAutomatic = false;
+
+    [Header("Ammo")]
+    public int magazineSize = 12;
+    public float reloadTime = 1.0f;
 }
