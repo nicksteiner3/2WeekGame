@@ -6,6 +6,8 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     public float CurrentHealth { get; private set; }
     public bool IsDead => CurrentHealth <= 0f;
+    
+    public event System.Action OnDeath;
 
     private void Awake()
     {
@@ -29,6 +31,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     private void Die()
     {
+        OnDeath?.Invoke();
         Destroy(gameObject);
     }
 }
