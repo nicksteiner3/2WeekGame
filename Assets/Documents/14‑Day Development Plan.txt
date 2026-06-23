@@ -1,0 +1,63 @@
+14 ‑ Day  Development  Plan  
+A  structured,  realistic,  50 ‑ hour  schedule  to  complete  the  v1  launch  build  of  Extraction  
+Micro
+‑
+Survivor
+.
+ 
+ 
+Day  1  —  Core  Player  +  Arena  (3–5  hours)  
+●  Create  simple  arena  (plane  +  walls)  ●  Add  directional  light  with  hard  shadows  ●  Implement  WASD  movement  ●  Add  camera  follow  ●  Add  basic  shooting  (hitscan)  ●  Add  dummy  target  to  test  damage  
+ 
+Day  2  —  Enemy  AI  +  Spawner  (4–6  hours)  
+●  Create  basic  chaser  enemy  ●  Implement  simple  seek  behavior  ●  Add  contact  damage  ●  Add  enemy  health  +  death  ●  Build  enemy  spawner  with  increasing  intensity  ●  Add  elite  variant  (bigger,  faster)  
+ 
+Day  3  —  Weapons  (3–4  hours)  
+●  Implement  pistol  ●  Implement  shotgun  ●  Implement  SMG  ●  Add  shared  muzzle  flash  +  impact  VFX  ●  Add  shared  SFX  ●  Add  weapon  switching  
+ 
+
+Day  4  —  Extraction  System  (2–3  hours)  
+●  Create  extraction  zone  prefab  ●  Spawn  extraction  zone  at  3:00  ●  Add  5 ‑ second  extraction  timer  ●  Reset  timer  on  damage  ●  End  run  on  successful  extraction  
+ 
+Day  5  —  Meta  Progression  (4–6  hours)  
+●  Implement  currency  system  ●  Add  extraction  reward  logic  ●  Build  upgrade  screen  UI  ●  Add  six  upgrades:  ○  Damage  ○  Fire  rate  ○  Move  speed  ○  Dash  charge  ○  Extraction  bonus  ○  Pickup  radius  
+ 
+Day  6  —  UI  +  Game  Flow  (3–5  hours)  
+●  Main  menu  (Play,  Upgrades,  Quit)  ●  Pause  menu  (Resume,  Quit)  ●  HUD  (health,  ammo,  timer)  ●  Run  summary  screen  ●  Basic  transitions  between  screens  
+ 
+Day  7  —  Juice  Pass  (4–6  hours)  
+●  Add  screen  shake  ●  Add  hit  flashes  ●  Add  enemy  death  pop  ●  Add  simple  VFX  for  shots  +  impacts  ●  Add  one  looping  music  track  ●  Add  basic  SFX  polish  
+
+ 
+Optional  Polish  Week  (Days  8–14)  
+These  tasks  are  optional  but  safe  and  won’t  expand  scope.  
+ 
+Day  8  —  Balance  Pass  (2–3  hours)  
+●  Tune  enemy  spawn  rate  ●  Tune  weapon  damage  +  fire  rate  ●  Tune  extraction  timing  
+ 
+Day  9  —  Visual  Pass  (3–4  hours)  
+●  Add  3–5  props  to  arena  ●  Add  color  grading  ●  Add  vignette  or  bloom  ●  Improve  lighting  contrast  
+ 
+Day  10  —  Sound  Pass  (2–3  hours)  
+●  Improve  weapon  SFX  ●  Add  ambient  loop  ●  Add  extraction  sound  
+ 
+Day  11  —  Steam  Page  Setup  (3–4  hours)  
+●  Write  short  +  long  descriptions  ●  Choose  tags  ●  Capture  screenshots  ●  Upload  assets  to  Steamworks  ●  Configure  page  settings  
+
+ 
+Day  12  —  Trailer  Capture  (3–4  hours)  
+●  Record  20–30  seconds  of  gameplay  ●  Add  simple  text  overlays  ●  Export  trailer  ●  Upload  to  Steam  page  
+ 
+Day  13  —  Bug  Fixing  (2–4  hours)  
+●  Fix  collision  issues  ●  Fix  UI  scaling  ●  Fix  extraction  edge  cases  ●  Fix  weapon  switching  bugs  
+ 
+Day  14  —  Final  Build  +  Playtest  (2–3  hours)  
+●  Build  Windows  release  ●  Test  on  clean  machine  ●  Upload  final  build  to  Steam  ●  Set  release  date  
+ 
+Completion  Target  
+By  the  end  of  Day  14,  the  game  is:  
+●  Fully  playable  ●  Polished  ●  Steam ‑ ready  ●  Within  the  50 ‑ hour  scope  
+This  schedule  ensures  you  ship  a  tight,  fun,  minimal  v1  and  leaves  room  for  future  updates  after  
+launch.
+ 
+ 

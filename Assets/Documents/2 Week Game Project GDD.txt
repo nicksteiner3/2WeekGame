@@ -1,0 +1,184 @@
+Extraction  Micro ‑ Survivor  —  Game  Design  
+Document
+ 
+(GDD)
+ 
+1.  High ‑ Concept  Overview  
+Game  Summary  
+Extraction  Micro ‑ Survivor  is  a  fast ‑ paced,  top ‑ down  arena  shooter  where  the  player  survives  
+escalating
+ 
+waves
+ 
+of
+ 
+enemies
+ 
+for
+ 
+three
+ 
+minutes,
+ 
+then
+ 
+attempts
+ 
+a
+ 
+high
+‑
+risk
+ 
+extraction.
+ 
+Runs
+ 
+last
+ 
+3–5
+ 
+minutes,
+ 
+and
+ 
+successful
+ 
+extraction
+ 
+rewards
+ 
+currency
+ 
+used
+ 
+to
+ 
+unlock
+ 
+permanent
+ 
+upgrades.
+ 
+Core  Fantasy  
+●  A  lone  operative  dropped  into  a  hostile  zone.  ●  Survive  long  enough  to  extract.  ●  Every  run  is  a  gamble:  risk  death  and  lose  everything,  or  extract  early  and  bank  rewards.  
+Core  Pillars  
+●  Fast,  responsive  combat  ●  Short,  addictive  runs  ●  High ‑ risk  extraction  tension  ●  Simple  but  meaningful  progression  ●  Minimal  content,  maximum  replayability  
+ 
+2.  Gameplay  Loop  
+Moment ‑ to ‑ Moment  Loop  
+1.  Drop  in  2.  Fight  waves  3.  Survive  until  extraction  appears  4.  Reach  extraction  zone  5.  Hold  for  5  seconds  6.  Extract  and  earn  currency  7.  Buy  upgrades  8.  Repeat  
+
+Run  Duration  
+●  Three  minutes  until  extraction  appears  ●  Five ‑ second  extraction  channel  ●  Optional:  stay  longer  for  bonus  currency  
+Failure  Condition  
+●  Death  results  in  losing  all  run  currency  
+ 
+3.  Player  Systems  
+Movement  
+●  WASD  movement  ●  Smooth  acceleration  ●  Top ‑ down  camera  follow  
+Weapons  
+All  weapons  are  hitscan.  
+●  Pistol:  balanced  and  accurate  ●  Shotgun:  close ‑ range  burst  ●  SMG:  high  fire  rate,  low  accuracy  
+Shared  assets:  
+●  Muzzle  flash  ●  Bullet  impact  ●  Sound  effects  ●  Recoil  animation  
+Health  System  
+●  Fixed  player  health  ●  No  healing  during  runs  ●  Damage  from  enemy  contact  
+ 
+4.  Enemy  Systems  
+
+Enemy  Types  
+Basic  Chaser  
+●  Moves  directly  toward  the  player  ●  Deals  contact  damage  ●  Low  health  ●  High  spawn  rate  
+Elite  Chaser  
+●  Larger  and  faster  ●  Higher  health  ●  Spawns  periodically  
+AI  Behavior  
+●  Simple  seek  behavior  ●  No  pathfinding  
+Spawner  
+●  Spawns  enemies  in  rings  around  the  arena  ●  Spawn  rate  increases  every  30  seconds  ●  Spawn  cap  to  maintain  performance  
+ 
+5.  Extraction  System  
+Extraction  Trigger  
+●  Extraction  zone  appears  at  the  three ‑ minute  mark.  
+Extraction  Zone  
+●  Circular  glowing  area  ●  Player  must  stand  inside  for  five  seconds  ●  Taking  damage  resets  the  timer  
+Rewards  
+●  Currency  awarded  only  on  successful  extraction  
+
+ 
+6.  Meta  Progression  
+Currency  
+●  Earned  only  on  extraction  ●  Used  to  unlock  permanent  upgrades  
+Upgrade  Tree  (Six  Nodes)  
+●  Damage  +10%  ●  Fire  Rate  +10%  ●  Move  Speed  +10%  ●  Dash  Charge  +1  ●  Extraction  Bonus  +10%  ●  Pickup  Radius  +10%  
+Upgrade  Screen  
+●  Single  page  with  simple  buttons  
+ 
+7.  UI  and  UX  
+HUD  
+●  Health  bar  ●  Ammo  count  ●  Timer  ●  Extraction  indicator  
+Menus  
+●  Main  Menu:  Play,  Upgrades,  Quit  ●  Pause  Menu:  Resume,  Quit  ●  Run  Summary:  Currency  gained  and  upgrades  available  
+ 
+8.  Art  Direction  
+
+Style:  Low ‑ Poly  Hard ‑ Shadow  Minimalism  
+●  Flat  colors  ●  Simple  shapes  ●  Hard  shadows  ●  Minimal  textures  ●  High  contrast  readability  
+Color  Palette  
+●  Arena:  dark  navy  or  charcoal  ●  Player:  cyan  or  white  ●  Enemies:  red  ●  Extraction:  gold  
+Visual  Effects  
+●  Additive  muzzle  flash  ●  White  hit  flash  ●  Red  enemy  pop  ●  Simple  circles  for  impacts  
+ 
+9.  Audio  Direction  
+Sound  Effects  
+●  One  gunshot  per  weapon  ●  One  enemy  death  sound  ●  One  hit  sound  ●  One  extraction  sound  
+Music  
+●  One  looping  track  ●  Tension ‑ building  synth  
+ 
+10.  Technical  Scope  
+Engine  
+
+Unity  
+Systems  to  Implement  
+●  Player  controller  ●  Weapon  system  ●  Enemy  AI  ●  Spawner  ●  Extraction  system  ●  Currency  and  upgrades  ●  UI  flow  
+Performance  Targets  
+●  60  FPS  ●  Fewer  than  200  enemies  on  screen  
+ 
+11.  Content  Limits  
+●  One  arena  ●  One  enemy  and  one  elite  variant  ●  Three  weapons  ●  Six  upgrades  ●  One  extraction  mechanic  ●  One  music  track  ●  No  bosses  ●  No  procedural  generation  ●  No  inventory  ●  No  crafting  ●  No  story  ●  No  cosmetics  ●  No  multiplayer  
+ 
+12.  Roadmap  
+●  Days  1–2:  Core  systems  ●  Days  3–4:  Weapons  and  extraction  ●  Days  5–6:  Meta  progression  and  UI  ●  Day  7:  Juice  
+
+●  Days  8–14:  Optional  polish  and  Steam  page  
+ 
+13.  Steam  Page  Positioning  
+Short  Description  
+A  fast ‑ paced  extraction  roguelite  where  every  run  lasts  3–5  minutes.  Survive  waves,  reach  the  
+extraction
+ 
+zone,
+ 
+and
+ 
+escape
+ 
+with
+ 
+your
+ 
+loot
+ 
+or
+ 
+die
+ 
+and
+ 
+lose
+ 
+everything.
+ 
+Tags  
+●  Action  Roguelite  ●  Top ‑ Down  Shooter  ●  Extraction  Shooter  ●  Minimalist  ●  Survival  
+ 
