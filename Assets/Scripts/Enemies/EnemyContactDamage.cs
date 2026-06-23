@@ -9,6 +9,12 @@ public class EnemyContactDamage : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
+        EnemyChaser chaser = GetComponent<EnemyChaser>();
+        if (chaser != null && chaser.freezeMovement)
+        {
+            return;
+        }
+
         if (Time.time < _nextDamageTime)
         {
             return;

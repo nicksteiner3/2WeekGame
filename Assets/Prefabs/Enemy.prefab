@@ -154,6 +154,7 @@ MonoBehaviour:
   acceleration: 20
   rotationSharpness: 12
   target: {fileID: 0}
+  freezeMovement: 0
 --- !u!114 &7507290197637075740
 MonoBehaviour:
   m_ObjectHideFlags: 0

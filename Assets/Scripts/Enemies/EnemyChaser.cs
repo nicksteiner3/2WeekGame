@@ -8,6 +8,9 @@ public class EnemyChaser : MonoBehaviour
     [SerializeField] private float rotationSharpness = 12f;
     [SerializeField] private Transform target;
 
+    [Header("Debug")]
+    [SerializeField] public bool freezeMovement = false;
+
     private Rigidbody _rb;
     private Vector3 _desiredVelocity;
 
@@ -32,6 +35,12 @@ public class EnemyChaser : MonoBehaviour
 
     private void Update()
     {
+        if (freezeMovement)
+        {
+            _desiredVelocity = Vector3.zero;
+            return;
+        }
+
         if (target == null)
         {
             _desiredVelocity = Vector3.zero;

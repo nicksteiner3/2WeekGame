@@ -2,67 +2,123 @@ using UnityEngine;
 
 public class PlayerShooter : MonoBehaviour
 {
-    [Header("Fire")]
-    [SerializeField] private float damagePerShot = 25f;
-    [SerializeField] private float shotsPerSecond = 4f;
-    [SerializeField] private float maxDistance = 40f;
+    [Header("Weapons")]
+    [SerializeField] private WeaponData[] weapons;
     [SerializeField] private Transform muzzlePoint;
     [SerializeField] private LayerMask hitMask = ~0;
 
     [Header("Debug")]
     [SerializeField] private bool drawDebugRay = true;
 
+    private int _activeWeaponIndex;
     private float _nextShotTime;
+
+    public WeaponData ActiveWeapon => (weapons != null && weapons.Length > 0) ? weapons[_activeWeaponIndex] : null;
 
     private void Update()
     {
-        if (!Input.GetMouseButton(0))
+        HandleWeaponSwitch();
+        HandleFiringInput();
+    }
+
+    private void HandleWeaponSwitch()
+    {
+        if (weapons == null || weapons.Length == 0)
         {
             return;
         }
 
-        if (Time.time < _nextShotTime)
+        if (Input.GetKeyDown(KeyCode.Alpha1)) SetWeapon(0);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) SetWeapon(1);
+        if (Input.GetKeyDown(KeyCode.Alpha3)) SetWeapon(2);
+
+        float scroll = Input.GetAxisRaw("Mouse ScrollWheel");
+        if (scroll > 0f)
+        {
+            SetWeapon((_activeWeaponIndex + 1) % weapons.Length);
+        }
+        else if (scroll < 0f)
+        {
+            SetWeapon((_activeWeaponIndex - 1 + weapons.Length) % weapons.Length);
+        }
+    }
+
+    private void SetWeapon(int index)
+    {
+        if (weapons == null || index >= weapons.Length || weapons[index] == null)
         {
             return;
         }
 
-        Fire();
+        _activeWeaponIndex = index;
+        _nextShotTime = 0f;
+        Debug.Log($"[PlayerShooter] Switched to: {weapons[_activeWeaponIndex].weaponName}");
+    }
+
+    private void HandleFiringInput()
+    {
+        if (ActiveWeapon == null)
+        {
+            return;
+        }
+
+        bool fireInput = ActiveWeapon.isAutomatic
+            ? Input.GetMouseButton(0)
+            : Input.GetMouseButtonDown(0);
+
+        if (fireInput && Time.time >= _nextShotTime)
+        {
+            Fire();
+        }
     }
 
     private void Fire()
     {
-        _nextShotTime = Time.time + (1f / Mathf.Max(0.01f, shotsPerSecond));
+        WeaponData weapon = ActiveWeapon;
+        _nextShotTime = Time.time + (1f / Mathf.Max(0.01f, weapon.shotsPerSecond));
 
-        Vector3 origin;
-        Vector3 direction;
+        Vector3 origin = muzzlePoint != null
+            ? muzzlePoint.position
+            : transform.position + Vector3.up * 0.8f + transform.forward * 0.6f;
 
-        if (muzzlePoint != null)
-        {
-            origin = muzzlePoint.position;
-            direction = muzzlePoint.forward;
-        }
-        else
-        {
-            origin = transform.position + Vector3.up * 0.8f + transform.forward * 0.6f;
-            direction = transform.forward;
-        }
+        Vector3 baseDirection = muzzlePoint != null
+            ? muzzlePoint.forward
+            : transform.forward;
 
-        if (Physics.Raycast(origin, direction, out RaycastHit hit, maxDistance, hitMask, QueryTriggerInteraction.Ignore))
+        for (int i = 0; i < weapon.pelletsPerShot; i++)
         {
-            IDamageable damageable = hit.collider.GetComponentInParent<IDamageable>();
-            if (damageable != null)
+            Vector3 direction = ApplySpread(baseDirection, weapon.spreadAngleDegrees);
+
+            if (Physics.Raycast(origin, direction, out RaycastHit hit, weapon.maxDistance, hitMask, QueryTriggerInteraction.Ignore))
             {
-                damageable.TakeDamage(damagePerShot, gameObject);
-            }
+                IDamageable damageable = hit.collider.GetComponentInParent<IDamageable>();
+                if (damageable != null)
+                {
+                    damageable.TakeDamage(weapon.damagePerPellet, gameObject);
+                }
 
-            if (drawDebugRay)
+                if (drawDebugRay)
+                {
+                    Debug.DrawLine(origin, hit.point, Color.red, 0.15f);
+                }
+            }
+            else if (drawDebugRay)
             {
-                Debug.DrawLine(origin, hit.point, Color.red, 0.15f);
+                Debug.DrawRay(origin, direction * weapon.maxDistance, Color.yellow, 0.15f);
             }
         }
-        else if (drawDebugRay)
+    }
+
+    private Vector3 ApplySpread(Vector3 direction, float spreadDegrees)
+    {
+        if (spreadDegrees <= 0f)
         {
-            Debug.DrawRay(origin, direction * maxDistance, Color.yellow, 0.15f);
+            return direction;
         }
+
+        float halfAngle = spreadDegrees * 0.5f;
+        direction = Quaternion.AngleAxis(Random.Range(-halfAngle, halfAngle), Vector3.up) * direction;
+        direction = Quaternion.AngleAxis(Random.Range(-halfAngle, halfAngle), transform.right) * direction;
+        return direction.normalized;
     }
 }

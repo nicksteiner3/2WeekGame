@@ -12,6 +12,10 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private float intensityIncreaseInterval = 30f;
     [SerializeField] private float spawnRateIncreasePerInterval = 0.5f;
 
+    [Header("Debug")]
+    [SerializeField] private bool debugLimitSpawns = false;
+    [SerializeField] private int debugMaxEnemies = 3;
+
     private float _currentSpawnRate;
     private float _nextSpawnTime;
     private float _nextIntensityIncreaseTime;
@@ -43,7 +47,8 @@ public class EnemySpawner : MonoBehaviour
 
     private void UpdateSpawning()
     {
-        if (Time.time < _nextSpawnTime || _enemiesAlive >= maxEnemiesAlive)
+        int cap = debugLimitSpawns ? Mathf.Min(debugMaxEnemies, maxEnemiesAlive) : maxEnemiesAlive;
+        if (Time.time < _nextSpawnTime || _enemiesAlive >= cap)
         {
             return;
         }
