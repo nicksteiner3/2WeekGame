@@ -5,6 +5,8 @@ public class ExtractionZone : MonoBehaviour
     [SerializeField] private float channelDuration = 5f;
     [SerializeField] private Material activeMaterial;
     [SerializeField] private Material inactiveZoneMaterial;
+    [SerializeField] private int baseCurrencyReward = 75;
+    [SerializeField] private int currencyPerMinute = 15;
 
     private bool _isActive;
     private bool _playerInZone;
@@ -12,8 +14,9 @@ public class ExtractionZone : MonoBehaviour
     private MeshRenderer _meshRenderer;
     private Material _originalMaterial;
 
+    public delegate void ExtractionCompleteEvent(float runTime, int currencyEarned);
     public delegate void ExtractionEvent();
-    public static event ExtractionEvent OnExtractionComplete;
+    public static event ExtractionCompleteEvent OnExtractionComplete;
     public static event ExtractionEvent OnExtractionCancelled;
 
     private void Awake()
@@ -95,8 +98,16 @@ public class ExtractionZone : MonoBehaviour
     private void CompleteExtraction()
     {
         _isActive = false;
-        OnExtractionComplete?.Invoke();
-        Debug.Log("[ExtractionZone] Extraction complete!");
+        float runTime = Time.time; // This will be passed from RunManager
+        int currencyEarned = CalculateCurrencyReward(runTime);
+        OnExtractionComplete?.Invoke(runTime, currencyEarned);
+        Debug.Log($"[ExtractionZone] Extraction complete! Earned {currencyEarned} currency.");
+    }
+
+    private int CalculateCurrencyReward(float runTime)
+    {
+        int minutesSurvived = (int)(runTime / 60f);
+        return baseCurrencyReward + (minutesSurvived * currencyPerMinute);
     }
 
     private void SetVisuals(bool active)

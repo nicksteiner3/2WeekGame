@@ -5,6 +5,7 @@ public class RunManager : MonoBehaviour
     [SerializeField] private PlayerHealth playerHealth;
     [SerializeField] private EnemySpawner enemySpawner;
     [SerializeField] private ExtractionZone extractionZone;
+    [SerializeField] private RunSummaryScreen runSummaryScreen;
     [SerializeField] private float extractionSpawnTime = 3f; // 3 seconds for testing (change to 180 for 3 minutes)
 
     public float RunTime { get; private set; }
@@ -29,6 +30,11 @@ public class RunManager : MonoBehaviour
         if (extractionZone == null)
         {
             extractionZone = FindObjectOfType<ExtractionZone>();
+        }
+
+        if (runSummaryScreen == null)
+        {
+            runSummaryScreen = FindObjectOfType<RunSummaryScreen>();
         }
 
         // Subscribe to extraction events
@@ -124,9 +130,25 @@ public class RunManager : MonoBehaviour
         StartNewRun();
     }
 
-    private void HandleExtractionComplete()
+    private void HandleExtractionComplete(float runTime, int currencyEarned)
     {
         ExtractionActive = false;
+        
+        // Award currency
+        if (CurrencyManager.Instance != null)
+        {
+            CurrencyManager.Instance.AddCurrency(currencyEarned);
+        }
+
+        // Show summary screen
+        if (runSummaryScreen != null)
+        {
+            int totalCurrency = CurrencyManager.Instance != null 
+                ? CurrencyManager.Instance.GetTotalCurrency() 
+                : 0;
+            runSummaryScreen.Show(runTime, currencyEarned, totalCurrency);
+        }
+
         Debug.Log("[RunManager] Extraction completed! Run successful.");
         EndRun();
     }
@@ -140,4 +162,5 @@ public class RunManager : MonoBehaviour
         }
     }
 }
+
 
