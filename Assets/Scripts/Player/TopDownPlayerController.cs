@@ -46,7 +46,12 @@ public class TopDownPlayerController : MonoBehaviour
         float z = Input.GetAxisRaw("Vertical");
 
         Vector3 inputDirection = new Vector3(x, 0f, z).normalized;
-        _desiredVelocity = inputDirection * moveSpeed;
+        
+        // Apply move speed upgrade multiplier
+        float speedMultiplier = UpgradeManager.Instance != null 
+            ? UpgradeManager.Instance.GetMoveSpeedMultiplier() 
+            : 1f;
+        _desiredVelocity = inputDirection * (moveSpeed * speedMultiplier);
     }
 
     private void UpdateAimPoint()

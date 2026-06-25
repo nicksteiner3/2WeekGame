@@ -34,7 +34,7 @@ public class RunManager : MonoBehaviour
 
         if (runSummaryScreen == null)
         {
-            runSummaryScreen = FindObjectOfType<RunSummaryScreen>();
+            runSummaryScreen = FindObjectOfType<RunSummaryScreen>(true);
         }
 
         // Subscribe to extraction events

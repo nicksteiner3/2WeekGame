@@ -1,5 +1,7 @@
 # Day 4 Setup Checklist (Shotgun, SMG, Weapon Switching)
 
+Project: Embervault
+
 ## 1) Generate Weapon Assets
 
 1. In Unity top menu click **Game → Create Weapon Assets**.

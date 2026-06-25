@@ -1,5 +1,7 @@
 # Day 5 Setup Checklist (Magazine, Reload, Ammo HUD)
 
+Project: Embervault
+
 ## 1) Update Weapon Assets
 
 Open each weapon asset in Assets/Data/Weapons and confirm or set ammo values:

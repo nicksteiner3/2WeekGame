@@ -1,5 +1,7 @@
 # Day 3 Setup Checklist (Spawner + Run Management)
 
+Project: Embervault
+
 Use this to wire up waves and run flow.
 
 ## 1) Make Enemy Prefab

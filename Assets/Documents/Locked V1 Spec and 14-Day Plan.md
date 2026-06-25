@@ -1,4 +1,4 @@
-# Extraction Micro-Survivor: Locked V1 Spec (June 22, 2026)
+# Embervault: Locked V1 Spec (June 22, 2026)
 
 This document locks scope for a 2-week Unity sprint with a realistic solo schedule.
 

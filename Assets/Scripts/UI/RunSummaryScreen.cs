@@ -3,22 +3,20 @@ using TMPro;
 
 public class RunSummaryScreen : MonoBehaviour
 {
+    [SerializeField] private GameObject screenRoot;
     [SerializeField] private TextMeshProUGUI survivalTimeText;
     [SerializeField] private TextMeshProUGUI runCurrencyText;
     [SerializeField] private TextMeshProUGUI totalCurrencyText;
     [SerializeField] private TextMeshProUGUI continuePromptText;
     [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private UpgradeScreen upgradeScreen;
 
     private bool _isActive;
 
-    private void Start()
+    private void Awake()
     {
-        if (canvasGroup == null)
-        {
-            canvasGroup = GetComponent<CanvasGroup>();
-        }
-
-        Hide();
+        EnsureReferences();
+        HideAtStartup();
     }
 
     private void Update()
@@ -31,6 +29,7 @@ public class RunSummaryScreen : MonoBehaviour
 
     public void Show(float survivalTime, int currencyEarned, int totalCurrency)
     {
+        EnsureReferences();
         _isActive = true;
         
         int minutes = (int)(survivalTime / 60f);
@@ -63,12 +62,49 @@ public class RunSummaryScreen : MonoBehaviour
             canvasGroup.blocksRaycasts = true;
         }
 
-        gameObject.SetActive(true);
+        GetScreenRoot().SetActive(true);
         Time.timeScale = 0f; // Pause the game
-        Debug.Log("[RunSummaryScreen] Shown.");
     }
 
     public void Hide()
+    {
+        EnsureReferences();
+        _isActive = false;
+
+        if (canvasGroup != null)
+        {
+            canvasGroup.alpha = 0f;
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
+        }
+
+        GetScreenRoot().SetActive(false);
+        
+        // Show upgrade screen instead of resuming game
+        if (upgradeScreen != null)
+        {
+            upgradeScreen.Show();
+        }
+        else
+        {
+            Time.timeScale = 1f; // Resume the game if no upgrade screen
+        }
+    }
+
+    private void EnsureReferences()
+    {
+        if (canvasGroup == null)
+        {
+            canvasGroup = GetComponent<CanvasGroup>();
+        }
+
+        if (upgradeScreen == null)
+        {
+            upgradeScreen = FindObjectOfType<UpgradeScreen>(true);
+        }
+    }
+
+    private void HideAtStartup()
     {
         _isActive = false;
 
@@ -79,8 +115,25 @@ public class RunSummaryScreen : MonoBehaviour
             canvasGroup.blocksRaycasts = false;
         }
 
-        gameObject.SetActive(false);
-        Time.timeScale = 1f; // Resume the game
-        Debug.Log("[RunSummaryScreen] Hidden.");
+        GetScreenRoot().SetActive(false);
+    }
+
+    private GameObject GetScreenRoot()
+    {
+        if (screenRoot != null)
+        {
+            return screenRoot;
+        }
+
+        if (canvasGroup != null)
+        {
+            screenRoot = canvasGroup.gameObject;
+        }
+        else
+        {
+            screenRoot = gameObject;
+        }
+
+        return screenRoot;
     }
 }

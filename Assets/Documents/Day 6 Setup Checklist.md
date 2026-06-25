@@ -1,5 +1,7 @@
 # Day 6 Setup Checklist (Extraction Zone - 3:00 Mark)
 
+Project: Embervault
+
 ## 1) Create ExtractionZone Prefab
 
 1. In Hierarchy, right-click → 3D Object → Cylinder. Name it ExtractionZone.

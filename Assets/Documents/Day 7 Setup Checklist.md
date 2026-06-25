@@ -1,5 +1,7 @@
 # Day 7 Setup Checklist (Currency Reward & Run Summary)
 
+Project: Embervault
+
 ## 1) Create CurrencyManager GameObject
 
 1. In Hierarchy, right-click → Create Empty. Name it CurrencyManager.

@@ -1,5 +1,7 @@
 # Day 1 Setup Checklist (Unity 2022.3.49f1)
 
+Project: Embervault
+
 Use this to get movement + mouse aim working in SampleScene today.
 
 ## Input Choice

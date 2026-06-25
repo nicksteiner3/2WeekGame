@@ -1,5 +1,7 @@
 # Day 2 Setup Checklist (Shooting + Enemy)
 
+Project: Embervault
+
 Use this right after Day 1 scene setup.
 
 ## 1) Player Wiring

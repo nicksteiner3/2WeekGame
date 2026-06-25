@@ -119,7 +119,12 @@ public class PlayerShooter : MonoBehaviour
     private void Fire()
     {
         WeaponData weapon = ActiveWeapon;
-        _nextShotTime = Time.time + (1f / Mathf.Max(0.01f, weapon.shotsPerSecond));
+        
+        // Apply fire rate upgrade multiplier
+        float fireRateMultiplier = UpgradeManager.Instance != null 
+            ? UpgradeManager.Instance.GetFireRateMultiplier() 
+            : 1f;
+        _nextShotTime = Time.time + (1f / Mathf.Max(0.01f, weapon.shotsPerSecond * fireRateMultiplier));
         _currentAmmo[_activeWeaponIndex]--;
 
         Vector3 origin = muzzlePoint != null
@@ -139,7 +144,12 @@ public class PlayerShooter : MonoBehaviour
                 IDamageable damageable = hit.collider.GetComponentInParent<IDamageable>();
                 if (damageable != null)
                 {
-                    damageable.TakeDamage(weapon.damagePerPellet, gameObject);
+                    // Apply damage upgrade multiplier
+                    float damageMultiplier = UpgradeManager.Instance != null 
+                        ? UpgradeManager.Instance.GetDamageMultiplier() 
+                        : 1f;
+                    float finalDamage = weapon.damagePerPellet * damageMultiplier;
+                    damageable.TakeDamage(finalDamage, gameObject);
                 }
 
                 if (drawDebugRay)
